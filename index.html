@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Code4Nature – Program for a Greener Future</title>
+  <meta name="description" content="Code4Nature - Learn to Code, Save the Earth. Single-file demo by kalaihari5687" />
+  <style>
+    /* ---------- Simple Nature Theme CSS ---------- */
+    :root{
+      --bg: linear-gradient(180deg, rgba(0,255,255,0.1) 0%, rgba(255,0,255,0.1) 50%, rgba(0,255,0,0.1) 100%), linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e);
+      --card:rgba(0,255,255,0.1);
+      --accent:#00ffff;
+      --muted:#ffffff;
+      --glass: rgba(0,255,255,0.2);
+    }
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+    body{background:var(--bg);color:#00ffff;display:flex;flex-direction:column;align-items:center;padding:18px;text-shadow:0 0 5px #00ffff}
+    header{width:100%;max-width:1100px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .logo{display:flex;gap:12px;align-items:center}
+    .logo .leaf{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#32a852,#2b8c50);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    h1{margin:0;font-size:20px}
+    .nav{display:flex;gap:8px}
+    .btn{background:linear-gradient(45deg, #00ffff, #ff00ff);color:#000;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 0 15px rgba(0,255,255,0.5);text-shadow:0 0 5px #000;transition:all 0.3s}
+    .btn:hover{box-shadow:0 0 25px rgba(255,0,255,0.7);transform:translateY(-2px)}
+    main{width:100%;max-width:1100px;display:grid;grid-template-columns:320px 1fr;gap:16px}
+    /* sidebar */
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,255,255,0.3), 0 0 30px rgba(255,0,255,0.2);border:1px solid rgba(0,255,255,0.5)}
+    .sidebar{height:calc(100vh - 150px);overflow:auto}
+    .profile{display:flex;gap:12px;align-items:center}
+    .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,#ffd27a,#ffb86b);display:flex;align-items:center;justify-content:center;font-weight:800}
+    .username{font-weight:700}
+    .lessons{margin-top:12px}
+    .lesson{padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);margin-bottom:8px;cursor:pointer}
+    .lesson.active{outline:3px solid rgba(43,140,80,0.12)}
+
+    /* workspace */
+    .workspace{display:flex;flex-direction:column;gap:12px;height:calc(100vh - 150px)}
+    .editorWrap{display:flex;gap:12px}
+    .editor{flex:1;min-height:240px}
+    textarea.editorArea{width:100%;height:280px;padding:12px;border-radius:10px;border:2px dashed rgba(43,140,80,0.15);font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;font-size:14px;resize:vertical}
+    .buttons{display:flex;gap:8px;margin-top:6px}
+    .output{flex:1;background:linear-gradient(180deg,#eaffea,#f1fff0);padding:12px;border-radius:10px;min-height:280px;overflow:auto}
+    .scene{display:flex;flex-wrap:wrap;gap:8px}
+    .doll{width:84px;height:84px;border-radius:8px;background:rgba(255,255,255,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;font-size:12px;box-shadow:0 6px 12px rgba(10,50,10,0.06);position:relative;margin:4px;color:#000}
+    .doll img{max-width:64px;max-height:48px}
+    .doll-group{display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;min-width:140px;min-height:120px;border:3px solid rgba(43,140,80,0.4);border-radius:16px;background:linear-gradient(135deg, rgba(43,140,80,0.1), rgba(50,168,82,0.05));padding:12px;margin:6px;position:relative;box-shadow:0 4px 15px rgba(43,140,80,0.2);animation:groupPulse 3s ease-in-out infinite}
+    .doll-group .group-label{position:absolute;top:-12px;left:12px;background:linear-gradient(45deg, rgba(43,140,80,0.9), rgba(50,168,82,0.8));color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:bold;box-shadow:0 2px 8px rgba(43,140,80,0.3);border:1px solid rgba(255,255,255,0.3)}
+    .doll-group.forest{border-color:rgba(34,139,34,0.6);background:linear-gradient(135deg, rgba(34,139,34,0.15), rgba(0,100,0,0.08));box-shadow:0 4px 15px rgba(34,139,34,0.25);position:relative;overflow:hidden}
+    .doll-group.forest::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="20" font-size="20">🌲</text><text y="40" x="20" font-size="15">🌳</text><text y="60" x="40" font-size="18">🌲</text><text y="30" x="60" font-size="16">🌳</text><text y="50" x="80" font-size="14">🌲</text></svg>') no-repeat;background-size:contain;opacity:0.3;pointer-events:none}
+    .doll-group.forest .group-label{background:linear-gradient(45deg, rgba(34,139,34,0.9), rgba(0,100,0,0.8))}
+    .doll-group.meadow{border-color:rgba(255,193,7,0.6);background:linear-gradient(135deg, rgba(255,193,7,0.15), rgba(255,152,0,0.08));box-shadow:0 4px 15px rgba(255,193,7,0.25)}
+    .doll-group.meadow .group-label{background:linear-gradient(45deg, rgba(255,193,7,0.9), rgba(255,152,0,0.8))}
+    .doll-group.river{border-color:rgba(0,123,255,0.6);background:linear-gradient(135deg, rgba(0,123,255,0.15), rgba(0,86,179,0.08));box-shadow:0 4px 15px rgba(0,123,255,0.25);position:relative;overflow:hidden}
+    .doll-group.river::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,50 Q25,40 50,50 T100,50" stroke="rgba(0,123,255,0.3)" stroke-width="3" fill="none"/><path d="M0,60 Q25,50 50,60 T100,60" stroke="rgba(0,123,255,0.2)" stroke-width="2" fill="none"/><path d="M0,70 Q25,60 50,70 T100,70" stroke="rgba(0,123,255,0.1)" stroke-width="1" fill="none"/></svg>') no-repeat;background-size:cover;opacity:0.6;pointer-events:none;animation:flowing 3s ease-in-out infinite}
+    .doll-group.river .group-label{background:linear-gradient(45deg, rgba(0,123,255,0.9), rgba(0,86,179,0.8))}
+    
+    @keyframes flowing {
+      0%, 100% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+    }
+    .doll-group.village{border-color:rgba(220,53,69,0.6);background:linear-gradient(135deg, rgba(220,53,69,0.15), rgba(200,35,51,0.08));box-shadow:0 4px 15px rgba(220,53,69,0.25)}
+    .doll-group.village .group-label{background:linear-gradient(45deg, rgba(220,53,69,0.9), rgba(200,35,51,0.8))}
+    .doll-group.swamp{border-color:rgba(40,167,69,0.6);background:linear-gradient(135deg, rgba(40,167,69,0.15), rgba(25,135,84,0.08));box-shadow:0 4px 15px rgba(40,167,69,0.25)}
+    .doll-group.swamp .group-label{background:linear-gradient(45deg, rgba(40,167,69,0.9), rgba(25,135,84,0.8))}
+    
+    @keyframes groupPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(43,140,80,0.2); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(43,140,80,0.3); }
+    }
+    .doll-small{width:32px;height:32px;font-size:16px;padding:2px}
+    .doll-medium{width:48px;height:48px;font-size:20px;padding:4px}
+    .controls{display:flex;justify-content:space-between;align-items:center}
+    .snippets{background:var(--glass);padding:8px;border-radius:8px}
+    .snippet{padding:6px;border-radius:6px;background:rgba(255,255,255,0.6);margin-bottom:6px;font-family:ui-monospace}
+    footer{text-align:center;margin-top:18px;color:var(--muted)}
+    .galleryGrid{display:flex;flex-wrap:wrap;gap:8px}
+    .cardSmall{padding:8px;border-radius:8px;background:rgba(255,255,255,0.85);color:#000}
+    /* badges */
+    .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{padding:6px 8px;border-radius:999px;background:#fff8cc;border:1px solid #ffe9a3;color:#000;font-weight:600}
+    /* popup */
+    .popup{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.95);background:linear-gradient(180deg,#fffef0,#f0fff6);padding:18px;border-radius:12px;box-shadow:0 14px 40px rgba(10,50,10,0.12);display:none;z-index:1000}
+    .popup.show{display:block}
+    
+    /* Success popup */
+    .success-popup{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.95);background:linear-gradient(135deg, rgba(0,255,0,0.9), rgba(0,200,0,0.8));padding:20px;border-radius:16px;box-shadow:0 0 30px rgba(0,255,0,0.5);display:none;z-index:1001;color:#000;text-align:center;border:2px solid rgba(0,255,0,0.6)}
+    .success-popup.show{display:block;animation:successPulse 0.5s ease-out}
+    .success-popup h3{margin:0 0 10px 0;font-size:18px;text-shadow:0 0 5px #000}
+    .success-popup p{margin:0;font-size:14px;text-shadow:0 0 3px #000}
+    
+    /* Error popup with monkey */
+    .error-popup{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.95);background:linear-gradient(135deg, rgba(255,0,0,0.9), rgba(200,0,0,0.8));padding:20px;border-radius:16px;box-shadow:0 0 30px rgba(255,0,0,0.5);display:none;z-index:1001;color:#fff;text-align:center;border:2px solid rgba(255,0,0,0.6)}
+    .error-popup.show{display:block;animation:errorShake 0.5s ease-out}
+    .error-popup h3{margin:0 0 10px 0;font-size:18px;text-shadow:0 0 5px #000}
+    .error-popup p{margin:0;font-size:14px;text-shadow:0 0 3px #000}
+    .monkey-image{font-size:48px;margin:10px 0;animation:monkeyEarClose 1s ease-in-out infinite}
+    
+    @keyframes successPulse {
+      0% { transform: translate(-50%,-50%) scale(0.8); opacity: 0; }
+      50% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    }
+    
+    @keyframes errorShake {
+      0%, 100% { transform: translate(-50%,-50%) scale(0.95); }
+      25% { transform: translate(-48%,-50%) scale(0.95); }
+      75% { transform: translate(-52%,-50%) scale(0.95); }
+    }
+    
+    @keyframes monkeyEarClose {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.9) rotate(-5deg); }
+    }
+
+    /* Modal Styles */
+    .learn-basics-modal, .badges-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 2000;
+      overflow-y: auto;
+    }
+    
+    .learn-basics-modal.show, .badges-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(255,0,255,0.1));
+      border: 2px solid rgba(0,255,255,0.5);
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(0,255,255,0.3);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0,255,255,0.3);
+      padding-bottom: 10px;
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #00ffff;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .close-modal:hover {
+      color: #ff00ff;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+    
+    .modal-body {
+      color: #000;
+    }
+    
+    .lesson-section {
+      margin-bottom: 25px;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(0,255,255,0.2);
+    }
+    
+    .lesson-section h3 {
+      margin: 0 0 10px 0;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
+    
+    .lesson-section p {
+      margin: 0 0 10px 0;
+      color: #000;
+    }
+    
+    .code-example {
+      background: rgba(0,0,0,0.8);
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    
+    .code-example pre {
+      margin: 0;
+      color: #00ffff;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    .modal-footer {
+      margin-top: 20px;
+      text-align: center;
+      border-top: 1px solid rgba(0,255,255,0.3);
+      padding-top: 15px;
+    }
+    
+    .badges-section {
+      margin-bottom: 20px;
+    }
+    
+    .badges-section h3 {
+      margin: 0 0 15px 0;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
+    
+    .badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .badge-item {
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .badge-earned {
+      background: linear-gradient(45deg, #00ff00, #00cc00);
+      color: #000;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 10px rgba(0,255,0,0.5);
+    }
+    
+    .badge-available {
+      background: linear-gradient(45deg, #666, #444);
+      color: #ccc;
+      border: 2px solid #666;
+    }
+
+    /* Authentication Pages */
+    .auth-container{display:none;width:100%;max-width:400px;margin:50px auto;padding:20px}
+    .auth-container.show{display:block}
+    .auth-card{background:linear-gradient(135deg, rgba(0,255,255,0.1), rgba(255,0,255,0.1), rgba(0,255,0,0.1));padding:30px;border-radius:16px;box-shadow:0 8px 24px rgba(0,255,255,0.3), 0 0 40px rgba(255,0,255,0.2);text-align:center;border:2px solid rgba(0,255,255,0.5);animation:neonGlow 2s ease-in-out infinite alternate}
+    .auth-title{font-size:24px;font-weight:700;margin-bottom:8px;color:#00ffff;text-shadow:0 0 10px #00ffff, 0 0 20px #00ffff}
+    .auth-subtitle{font-size:14px;color:#ffffff;margin-bottom:24px;text-shadow:0 0 5px #ffffff}
+    .form-group{margin-bottom:16px;text-align:left}
+    .form-label{display:block;font-weight:600;margin-bottom:6px;color:#ffffff;text-shadow:0 0 5px #ffffff}
+    .form-input{width:100%;padding:12px;border:2px solid rgba(0,255,255,0.5);border-radius:8px;font-size:14px;transition:all 0.3s;background:rgba(0,0,0,0.3);color:#ffffff;box-shadow:0 0 10px rgba(0,255,255,0.3)}
+    .form-input:focus{outline:none;border-color:#00ffff;box-shadow:0 0 20px rgba(0,255,255,0.6)}
+    .form-input::placeholder{color:rgba(255,255,255,0.7)}
+    .form-error{color:#ff0080;font-size:12px;margin-top:4px;display:none;text-shadow:0 0 5px #ff0080}
+    .form-error.show{display:block}
+    .auth-btn{width:100%;padding:12px;background:linear-gradient(45deg, #00ffff, #ff00ff);color:#000;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 0 20px rgba(0,255,255,0.5);text-shadow:0 0 5px #000}
+    .auth-btn:hover{background:linear-gradient(45deg, #ff00ff, #00ffff);box-shadow:0 0 30px rgba(255,0,255,0.7)}
+    .auth-link{color:#00ffff;text-decoration:none;font-weight:600;cursor:pointer;text-shadow:0 0 5px #00ffff}
+    .auth-link:hover{text-decoration:underline;text-shadow:0 0 10px #00ffff}
+    .auth-switch{margin-top:20px;font-size:14px;color:#ffffff}
+    .logout-btn{background:linear-gradient(45deg, #ff0080, #ff4000);color:#fff;padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;box-shadow:0 0 10px rgba(255,0,128,0.5)}
+    .logout-btn:hover{background:linear-gradient(45deg, #ff4000, #ff0080);box-shadow:0 0 20px rgba(255,0,128,0.7)}
+
+    @keyframes neonGlow {
+      from { box-shadow: 0 8px 24px rgba(0,255,255,0.3), 0 0 40px rgba(255,0,255,0.2); }
+      to { box-shadow: 0 8px 24px rgba(255,0,255,0.4), 0 0 50px rgba(0,255,255,0.3); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Authentication Pages -->
+  <div class="auth-container" id="loginPage">
+    <div class="auth-card">
+      <div class="auth-title">Welcome Back!</div>
+      <div class="auth-subtitle">Sign in to continue your coding journey</div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" class="form-input" placeholder="Enter your username" required>
+          <div class="form-error" id="loginUsernameError">Username is required</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+          <div class="form-error" id="loginPasswordError">Password is required</div>
+        </div>
+        <button type="submit" class="auth-btn">Sign In</button>
+        <div class="auth-switch">
+          Don't have an account? <span class="auth-link" id="showSignup">Sign up</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="auth-container" id="signupPage">
+    <div class="auth-card">
+      <div class="auth-title">Join Code4Nature!</div>
+      <div class="auth-subtitle">Create your account to start coding for nature</div>
+      <form id="signupForm">
+        <div class="form-group">
+          <label class="form-label" for="signupUsername">Username</label>
+          <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username" required>
+          <div class="form-error" id="signupUsernameError">Username is required</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
+          <div class="form-error" id="signupEmailError">Valid email is required</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required>
+          <div class="form-error" id="signupPasswordError">Password must be at least 6 characters</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupConfirmPassword">Confirm Password</label>
+          <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Confirm your password" required>
+          <div class="form-error" id="signupConfirmPasswordError">Passwords do not match</div>
+        </div>
+        <button type="submit" class="auth-btn">Create Account</button>
+        <div class="auth-switch">
+          Already have an account? <span class="auth-link" id="showLogin">Sign in</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Website (hidden initially) -->
+  <div id="mainWebsite">
+  <header>
+    <div class="logo">
+      <div class="leaf">C4N</div>
+      <div>
+        <h1>Code4Nature – Program for a Greener Future</h1>
+        <div style="font-size:12px;color:var(--muted)">Learn to Code, Save the Earth — single-file demo by <strong>kalaihari5687</strong></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" id="startCoding">Start Coding</button>
+      <button class="btn" id="learnBasics">Learn Basics</button>
+      <button class="btn" id="challengesBtn">Challenges</button>
+      <button class="btn" id="galleryBtn">Gallery</button>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="card sidebar">
+      <div class="profile">
+        <div class="avatar">K</div>
+        <div>
+          <div class="username">kalaihari5687</div>
+          <div style="font-size:12px;color:var(--muted)">Student • Code4Nature</div>
+        </div>
+      </div>
+
+      <div class="lessons">
+        <h4>Lessons</h4>
+        <div class="lesson" data-lesson="intro">Intro: print & add</div>
+        <div class="lesson" data-lesson="vars">Variables & datatypes</div>
+        <div class="lesson" data-lesson="loops">Loops (for)</div>
+        <div class="lesson" data-lesson="conds">Conditionals</div>
+        <div class="lesson" data-lesson="functions">Functions</div>
+        <div class="lesson" data-lesson="lists">Lists & Dicts</div>
+      </div>
+
+      <div style="margin-top:12px">
+        <h4>Badges</h4>
+        <div class="badges" id="badges">
+          <div class="badge">Tree Planter 🌱</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <h4>Snippets</h4>
+        <div class="snippets" id="snippets">
+          <div class="snippet">print("tree")</div>
+          <div class="snippet">for i in range(3): print("tree")</div>
+          <div class="snippet">add("cow")
+          </div>
+          <div class="snippet">water = "dirty"\nif water == "dirty": save("water")</div>
+          <div class="snippet">def clean():\n  save("water")\nclean()</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <section class="card workspace">
+      <div class="controls">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="font-weight:700">Coding Sandbox</div>
+          <div style="font-size:12px;color:var(--muted)">Type Python-like code below. Supported: print(), add(), save(), for-range loops, simple if/else, variable equality, lists (basic), and function invoke (simple).</div>
+        </div>
+        <div>
+          <span style="margin-right:8px">Points: <strong id="points">0</strong></span>
+          <button class="btn" id="runBtn">Run ▶</button>
+          <button class="btn" id="saveScene">Save Scene</button>
+        </div>
+      </div>
+
+      <div class="editorWrap">
+        <div class="editor">
+          <textarea id="editor" class="editorArea"># 🌟 Code4Nature - Comprehensive Examples 🌟\n\n# 1) BASIC PRINT STATEMENTS\nprint("tree")\nprint("cow")\nprint("river")\n\n# 2) ADDING ANIMALS\nadd("deer")\nadd("elephant")\nadd("lion")\n\n# 3) SAVING WATER (creates river with fish)\nsave("water")\n\n# 4) VARIABLES AND CONDITIONALS\nland = "dry"\nif land == "dry":\n  print("cactus")\nelse:\n  print("crop")\n\n# 5) LOOPS\nfor i in range(3):\n  print("oak_tree")\n\n# 6) LISTS AND ITERATION\nanimals = ["cow", "deer", "elephant"]\nfor animal in animals:\n  add(animal)\n\n# 7) DICTIONARIES\nhabitat = {"cow": "field", "deer": "forest", "elephant": "savanna"}\n\n# 8) FUNCTIONS\ndef plant_garden():\n  for i in range(2):\n    print("tree")\nplant_garden()\n\n# 9) MIXED SCENARIOS\nwildlife = ["lion", "zebra", "bird"]\nfor creature in wildlife:\n  add(creature)\n</textarea>
+          <div class="buttons">
+            <button class="btn" id="loadExample">Load Example</button>
+            <button class="btn" id="clearEditor">Clear</button>
+            <button class="btn" id="formatBtn">Format (basic)</button>
+          </div>
+        </div>
+
+        <div class="output" id="output">
+          <div style="font-weight:700;margin-bottom:8px">Visual Output</div>
+          <div class="scene" id="scene"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start;margin-top:8px">
+        <div style="flex:1">
+          <h4>Challenges</h4>
+          <div id="challengesList">
+            <div class="cardSmall">Level 1: Plant 3 trees — reward: Tree Planter</div>
+            <div class="cardSmall">Level 2: Add 2 animals — reward: Forest Guardian</div>
+            <div class="cardSmall">Level 3: Save the river — reward: River Saver</div>
+            <div class="cardSmall">Final: Big Mission — unlock special Hanuman scene</div>
+          </div>
+        </div>
+        <div style="width:280px">
+          <h4>Gallery</h4>
+          <div id="gallery" class="galleryGrid"></div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <div class="popup" id="popup">
+    <div style="font-weight:800;font-size:18px">Well done, Nature Coder!</div>
+    <div style="margin-top:8px">You completed a challenge and earned a badge. Be proud 🌱</div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+      <button class="btn" id="closePopup">Close</button>
+    </div>
+  </div>
+
+  <!-- Success Popup -->
+  <div class="success-popup" id="successPopup">
+    <h3>🎉 Code Executed Successfully!</h3>
+    <p>Your code ran without any errors. Great job!</p>
+    <button class="btn" id="closeSuccessPopup" style="margin-top:10px">Continue</button>
+  </div>
+
+  <!-- Error Popup with Monkey -->
+  <div class="error-popup" id="errorPopup">
+    <h3>🐒 Oops! Code Error</h3>
+    <div class="monkey-image">🙉</div>
+    <p>Monkey closes his ears! Check your code for errors.</p>
+    <button class="btn" id="closeErrorPopup" style="margin-top:10px">Try Again</button>
+  </div>
+
+  <!-- Learn Basics Modal -->
+  <div class="learn-basics-modal" id="learnBasicsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📚 Learn Programming Basics</h2>
+        <button class="close-modal" id="closeLearnModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="lesson-section">
+          <h3>1. Print Statements</h3>
+          <p>Use <code>print()</code> to display text and create objects:</p>
+          <div class="code-example">
+            <pre>print("tree")        # Creates a tree
+print("cow")         # Creates a cow
+print("river")       # Creates a river</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>2. Adding Animals</h3>
+          <p>Use <code>add()</code> to add animals to your scene:</p>
+          <div class="code-example">
+            <pre>add("deer")         # Adds a deer
+add("elephant")     # Adds an elephant
+add("lion")         # Adds a lion</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>3. Variables</h3>
+          <p>Store data in variables:</p>
+          <div class="code-example">
+            <pre>name = "forest"
+type = "trees"
+print(name)</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>4. Conditionals (if/else)</h3>
+          <p>Make decisions in your code:</p>
+          <div class="code-example">
+            <pre>weather = "sunny"
+if weather == "sunny":
+    print("tree")
+else:
+    print("cactus")</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>5. Loops</h3>
+          <p>Repeat actions with loops:</p>
+          <div class="code-example">
+            <pre>for i in range(3):
+    print("oak_tree")</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>6. Lists</h3>
+          <p>Store multiple items in a list:</p>
+          <div class="code-example">
+            <pre>animals = ["cow", "deer", "elephant"]
+for animal in animals:
+    add(animal)</pre>
+          </div>
+        </div>
+        
+        <div class="lesson-section">
+          <h3>7. Functions</h3>
+          <p>Create reusable code blocks:</p>
+          <div class="code-example">
+            <pre>def create_forest():
+    for i in range(3):
+        print("tree")
+create_forest()</pre>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="tryExamples">Try These Examples</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Badges Modal -->
+  <div class="badges-modal" id="badgesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🏆 Your Badges & Achievements</h2>
+        <button class="close-modal" id="closeBadgesModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="badges-section">
+          <h3>🎖️ Earned Badges</h3>
+          <div id="earnedBadges" class="badges-container"></div>
+        </div>
+        <div class="badges-section">
+          <h3>🎯 Available Badges</h3>
+          <div id="availableBadges" class="badges-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-size:12px">Made with ♥ for sustainability. Your GitHub: <strong>kalaihari5687</strong></div>
+  </footer>
+  </div> <!-- End of mainWebsite -->
+
+  <script>
+    // ------- Authentication System --------
+    let currentUser = null;
+    let users = JSON.parse(localStorage.getItem('c4n_users') || '[]');
+
+    // Check if user is logged in on page load
+    function checkAuth() {
+      const loggedInUser = localStorage.getItem('c4n_currentUser');
+      if (loggedInUser) {
+        currentUser = JSON.parse(loggedInUser);
+        showMainWebsite();
+        updateUserDisplay();
+      } else {
+        showLoginPage();
+      }
+    }
+
+    // Show login page
+    function showLoginPage() {
+      document.getElementById('loginPage').classList.add('show');
+      document.getElementById('signupPage').classList.remove('show');
+      document.getElementById('mainWebsite').style.display = 'none';
+    }
+
+    // Show signup page
+    function showSignupPage() {
+      document.getElementById('signupPage').classList.add('show');
+      document.getElementById('loginPage').classList.remove('show');
+      document.getElementById('mainWebsite').style.display = 'none';
+    }
+
+    // Show main website
+    function showMainWebsite() {
+      document.getElementById('loginPage').classList.remove('show');
+      document.getElementById('signupPage').classList.remove('show');
+      document.getElementById('mainWebsite').style.display = 'block';
+    }
+
+    // Update user display in header and sidebar
+    function updateUserDisplay() {
+      if (currentUser) {
+        // Update header subtitle
+        const headerSubtitle = document.querySelector('header .logo div div');
+        headerSubtitle.innerHTML = `Learn to Code, Save the Earth — single-file demo by <strong>${currentUser.username}</strong>`;
+        
+        // Update sidebar profile
+        const usernameEl = document.querySelector('.username');
+        const avatarEl = document.querySelector('.avatar');
+        if (usernameEl) usernameEl.textContent = currentUser.username;
+        if (avatarEl) avatarEl.textContent = currentUser.username.charAt(0).toUpperCase();
+      }
+    }
+
+    // Form validation
+    function validateForm(formType) {
+      let isValid = true;
+      
+      if (formType === 'login') {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        if (!username) {
+          showError('loginUsernameError', 'Username is required');
+          isValid = false;
+        } else {
+          hideError('loginUsernameError');
+        }
+        
+        if (!password) {
+          showError('loginPasswordError', 'Password is required');
+          isValid = false;
+        } else {
+          hideError('loginPasswordError');
+        }
+      } else if (formType === 'signup') {
+        const username = document.getElementById('signupUsername').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('signupConfirmPassword').value;
+        
+        if (!username) {
+          showError('signupUsernameError', 'Username is required');
+          isValid = false;
+        } else if (users.find(u => u.username === username)) {
+          showError('signupUsernameError', 'Username already exists');
+          isValid = false;
+        } else {
+          hideError('signupUsernameError');
+        }
+        
+        if (!email || !isValidEmail(email)) {
+          showError('signupEmailError', 'Valid email is required');
+          isValid = false;
+        } else {
+          hideError('signupEmailError');
+        }
+        
+        if (!password || password.length < 6) {
+          showError('signupPasswordError', 'Password must be at least 6 characters');
+          isValid = false;
+        } else {
+          hideError('signupPasswordError');
+        }
+        
+        if (password !== confirmPassword) {
+          showError('signupConfirmPasswordError', 'Passwords do not match');
+          isValid = false;
+        } else {
+          hideError('signupConfirmPasswordError');
+        }
+      }
+      
+      return isValid;
+    }
+
+    function showError(errorId, message) {
+      const errorEl = document.getElementById(errorId);
+      errorEl.textContent = message;
+      errorEl.classList.add('show');
+    }
+
+    function hideError(errorId) {
+      const errorEl = document.getElementById(errorId);
+      errorEl.classList.remove('show');
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Login function
+    function login(username, password) {
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        currentUser = user;
+        localStorage.setItem('c4n_currentUser', JSON.stringify(user));
+        showMainWebsite();
+        updateUserDisplay();
+        return true;
+      }
+      return false;
+    }
+
+    // Signup function
+    function signup(username, email, password) {
+      const newUser = {
+        id: Date.now(),
+        username,
+        email,
+        password,
+        createdAt: new Date().toISOString()
+      };
+      users.push(newUser);
+      localStorage.setItem('c4n_users', JSON.stringify(users));
+      currentUser = newUser;
+      localStorage.setItem('c4n_currentUser', JSON.stringify(newUser));
+      showMainWebsite();
+      updateUserDisplay();
+      return true;
+    }
+
+    // Logout function
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('c4n_currentUser');
+      showLoginPage();
+    }
+
+    // Event listeners for authentication
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validateForm('login')) {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        if (login(username, password)) {
+          // Success - user is now logged in
+        } else {
+          showError('loginPasswordError', 'Invalid username or password');
+        }
+      }
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validateForm('signup')) {
+        const username = document.getElementById('signupUsername').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        
+        signup(username, email, password);
+      }
+    });
+
+    document.getElementById('showSignup').addEventListener('click', function(e) {
+      e.preventDefault();
+      showSignupPage();
+    });
+
+    document.getElementById('showLogin').addEventListener('click', function(e) {
+      e.preventDefault();
+      showLoginPage();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      logout();
+    });
+
+    // Initialize authentication on page load
+    checkAuth();
+
+    // ------- Simple in-browser 'Python-like' interpreter (safe, limited) --------
+    // It does not execute real Python. It parses a small subset and maps to visuals.
+
+    const scene = document.getElementById('scene');
+    const editor = document.getElementById('editor');
+    const pointsEl = document.getElementById('points');
+    const galleryEl = document.getElementById('gallery');
+    const popup = document.getElementById('popup');
+
+    // Available dolls with emoji-ish representation (you can replace with images later)
+    const DOLLS = {
+      'tree': {label:'Tree', icon:'🌳'},
+      'mango_tree': {label:'Mango Tree', icon:'🌴'},
+      'oak_tree': {label:'Oak Tree', icon:'🌲'},
+      'cactus': {label:'Cactus', icon:'🌵'},
+      'cow': {label:'Cow', icon:'🐄'},
+      'deer': {label:'Deer', icon:'🦌'},
+      'elephant': {label:'Elephant', icon:'🐘'},
+      'lion': {label:'Lion', icon:'🦁'},
+      'dog': {label:'Dog', icon:'🐕'},
+      'zebra': {label:'Zebra', icon:'🦓'},
+      'penguin': {label:'Penguin', icon:'🐧'},
+      'fish': {label:'Fish', icon:'🐟'},
+      'crab': {label:'Crab', icon:'🦀'},
+      'boat': {label:'Boat', icon:'⛵'},
+      'river': {label:'A Floating River', icon:'🌊'},
+      'hanuman': {label:'Hanuman', icon:'🦸‍♂️'},
+      'farmer': {label:'Farmer', icon:'👨‍🌾'},
+      'bird': {label:'Bird', icon:'🐦'},
+      'crocodile': {label:'Crocodile', icon:'🐊'}
+    };
+
+    // Sound effects system - DISABLED
+    function playSound(soundType) {
+      // Sound effects removed as requested
+      return;
+    }
+
+    // Utility: create doll element
+    function createDoll(key, size = 'normal'){
+      const d = document.createElement('div');
+      d.className = `doll ${size === 'small' ? 'doll-small' : size === 'medium' ? 'doll-medium' : ''}`;
+      const info = DOLLS[key] || {label:key, icon:'❓'};
+      const fontSize = size === 'small' ? '16px' : size === 'medium' ? '20px' : '28px';
+      const labelSize = size === 'small' ? '8px' : size === 'medium' ? '10px' : '12px';
+      d.innerHTML = `<div style="font-size:${fontSize}">${info.icon}</div><div style="font-size:${labelSize}">${info.label}</div>`;
+      
+      // Add click animation effect
+      d.addEventListener('click', () => {
+        d.style.transform = 'translateY(-6px) scale(1.1)';
+        setTimeout(() => {
+          d.style.transform = 'translateY(0) scale(1)';
+        }, 200);
+      });
+      
+      return d;
+    }
+
+    // Scene management with realistic grouping
+    let sceneGroups = {};
+    
+    // Define object categories for realistic grouping
+    const OBJECT_CATEGORIES = {
+      'trees': ['tree', 'mango_tree', 'oak_tree', 'cactus'],
+      'animals': ['cow', 'deer', 'elephant', 'lion', 'dog', 'zebra', 'penguin', 'bird'],
+      'water_life': ['fish', 'crab'],
+      'water': ['river'],
+      'people': ['farmer', 'hanuman'],
+      'reptiles': ['crocodile']
+    };
+    
+    // Code analysis system to extract organisms and trees
+    function analyzeCodeForOrganisms(code) {
+      const organisms = {
+        trees: [],
+        animals: [],
+        water_life: [],
+        people: [],
+        reptiles: []
+      };
+      
+      // Extract from strings in the code
+      const stringMatches = code.match(/["']([^"']+)["']/g);
+      if (stringMatches) {
+        stringMatches.forEach(match => {
+          const content = match.replace(/["']/g, '');
+          for (const [category, items] of Object.entries(OBJECT_CATEGORIES)) {
+            if (items.includes(content) && !organisms[category].includes(content)) {
+              organisms[category].push(content);
+            }
+          }
+        });
+      }
+      
+      // Extract from list definitions
+      const listMatches = code.match(/\[([^\]]+)\]/g);
+      if (listMatches) {
+        listMatches.forEach(match => {
+          const content = match.replace(/[\[\]]/g, '');
+          const items = content.split(',').map(item => item.trim().replace(/["']/g, ''));
+          items.forEach(item => {
+            for (const [category, categoryItems] of Object.entries(OBJECT_CATEGORIES)) {
+              if (categoryItems.includes(item) && !organisms[category].includes(item)) {
+                organisms[category].push(item);
+              }
+            }
+          });
+        });
+      }
+      
+      // Extract from dictionary definitions
+      const dictMatches = code.match(/\{([^}]+)\}/g);
+      if (dictMatches) {
+        dictMatches.forEach(match => {
+          const content = match.replace(/[{}]/g, '');
+          const pairs = content.split(',').map(pair => {
+            const [key, value] = pair.split(':').map(s => s.trim().replace(/["']/g, ''));
+            return [key, value];
+          });
+          pairs.forEach(([key, value]) => {
+            for (const [category, categoryItems] of Object.entries(OBJECT_CATEGORIES)) {
+              if (categoryItems.includes(key) && !organisms[category].includes(key)) {
+                organisms[category].push(key);
+              }
+              if (categoryItems.includes(value) && !organisms[category].includes(value)) {
+                organisms[category].push(value);
+              }
+            }
+          });
+        });
+      }
+      
+      return organisms;
+    }
+    
+    // Create groups based on analyzed organisms
+    function createGroupsFromAnalysis(organisms) {
+      for (const [category, items] of Object.entries(organisms)) {
+        if (items.length > 0) {
+          const groupId = category === 'trees' ? 'forest' : 
+                        category === 'animals' ? 'meadow' :
+                        category === 'water_life' ? 'river' :
+                        category === 'people' ? 'village' :
+                        category === 'reptiles' ? 'swamp' : category;
+          
+          const groupLabel = category === 'trees' ? 'Forest' :
+                           category === 'animals' ? 'Meadow' :
+                           category === 'water_life' ? 'A Floating River' :
+                           category === 'people' ? 'Village' :
+                           category === 'reptiles' ? 'Swamp' : category;
+          
+          const groupIcon = category === 'trees' ? '🌲' :
+                          category === 'animals' ? '🌾' :
+                          category === 'water_life' ? '🌊' :
+                          category === 'people' ? '🏘️' :
+                          category === 'reptiles' ? '🐊' : '❓';
+          
+          if (!sceneGroups[groupId]) {
+            createGroup(groupId, groupLabel, groupIcon);
+          }
+          
+          // Add all items to the group
+          items.forEach(item => {
+            addToGroup(groupId, item);
+          });
+        }
+      }
+    }
+
+    // Scene operations
+    function addToScene(key){
+      // Check which category this object belongs to
+      let category = null;
+      for (const [cat, items] of Object.entries(OBJECT_CATEGORIES)) {
+        if (items.includes(key)) {
+          category = cat;
+          break;
+        }
+      }
+      
+      if (category === 'water_life') {
+        // Add to river group if it exists
+        if (sceneGroups.river) {
+          addToGroup('river', key);
+        } else {
+          // Create river group first
+          createGroup('river', 'A Floating River', '🌊');
+          addToGroup('river', key);
+        }
+      } else if (category === 'water') {
+        // Create river group
+        if (!sceneGroups.river) {
+          createGroup('river', 'A Floating River', '🌊');
+        }
+      } else if (category === 'trees') {
+        // Add to forest group
+        if (sceneGroups.forest) {
+          addToGroup('forest', key);
+        } else {
+          createGroup('forest', 'Forest', '🌲');
+          addToGroup('forest', key);
+        }
+      } else if (category === 'animals') {
+        // Add to field/meadow group
+        if (sceneGroups.meadow) {
+          addToGroup('meadow', key);
+        } else {
+          createGroup('meadow', 'Meadow', '🌾');
+          addToGroup('meadow', key);
+        }
+      } else if (category === 'people') {
+        // Add to village group
+        if (sceneGroups.village) {
+          addToGroup('village', key);
+        } else {
+          createGroup('village', 'Village', '🏘️');
+          addToGroup('village', key);
+        }
+      } else if (category === 'reptiles') {
+        // Add to swamp group
+        if (sceneGroups.swamp) {
+          addToGroup('swamp', key);
+        } else {
+          createGroup('swamp', 'Swamp', '🐊');
+          addToGroup('swamp', key);
+        }
+      } else {
+        // Regular standalone object
+        const el = createDoll(key);
+        scene.appendChild(el);
+      }
+    }
+    
+    function createGroup(groupId, label, icon) {
+      const groupEl = document.createElement('div');
+      groupEl.className = `doll-group ${groupId}`;
+      groupEl.id = `group-${groupId}`;
+      groupEl.innerHTML = `<div class="group-label">${label}</div>`;
+      scene.appendChild(groupEl);
+      sceneGroups[groupId] = groupEl;
+    }
+    
+    function addToGroup(groupId, key) {
+      if (sceneGroups[groupId]) {
+        const el = createDoll(key, 'small');
+        sceneGroups[groupId].appendChild(el);
+      }
+    }
+    
+    function playGroupSound(groupId) {
+      // Sound effects removed as requested
+      return;
+    }
+    
+    function clearScene(){ 
+      scene.innerHTML = ''; 
+      sceneGroups = {};
+    }
+
+    // Simple environment to hold variables
+    function createEnv(){ return {vars:{}} }
+
+    // Parser: very limited, line oriented. Support:
+    // print("x") or print('x') => add object (land or creature)
+    // add("x") => add object
+    // save("water") => add river and fish+crab
+    // for i in range(N):\n  print("x")  => loop
+    // var = "value"  => store variable
+    // if var == "value":\n  ...\nelse:\n  ...   => conditional blocks
+    // def name():\n  ...\nname() => functions - stored as block and executed on call
+
+    function runCode(raw){
+      const lines = raw.replace(/\r/g,'').split('\n');
+      const env = createEnv();
+      const funcs = {};
+
+      // helper: trim comments and empty
+      function isCommentOrBlank(line){ const t = line.trim(); return t.startsWith('#') || t === '' }
+
+      // tokenize indentation and blocks
+      let i = 0;
+      function execBlock(indentLevel){
+        while(i < lines.length){
+          let line = lines[i];
+          const leading = line.match(/^\s*/)[0].length;
+          if(leading < indentLevel) return; // end of this block
+          // process line at this indent or deeper
+          line = line.trim();
+          i++;
+          if(isCommentOrBlank(line)) continue;
+
+          // function def
+          const funcDef = line.match(/^def\s+([a-zA-Z0-9_]+)\s*\(\)\s*:\s*$/);
+          if(funcDef){
+            const fname = funcDef[1];
+            const start = i;
+            // collect block
+            const body = [];
+            while(i < lines.length){
+              const ln = lines[i];
+              const lpad = ln.match(/^\s*/)[0].length;
+              if(lpad <= leading) break;
+              body.push(ln.slice(leading+2)); // naive
+              i++;
+            }
+            funcs[fname] = body.join('\n');
+            continue;
+          }
+
+          // for loop: for i in range(N): or for item in list:
+          const forMatch = line.match(/^for\s+([a-zA-Z0-9_]+)\s+in\s+range\((\d+)\)\s*:\s*$/);
+          if(forMatch){
+            const count = parseInt(forMatch[2],10);
+            const body = [];
+            // gather body
+            while(i < lines.length){
+              const ln = lines[i];
+              const lpad = ln.match(/^\s*/)[0].length;
+              if(lpad <= leading) break;
+              body.push(ln.slice(leading+2));
+              i++;
+            }
+            for(let k=0;k<count;k++){
+              // execute body lines by injecting into lines for a temporary run
+              const savedI = i;
+              const savedLines = lines.slice();
+              // replace current pointer with body and run
+              const bodyText = body.join('\n');
+              // recursively run body
+              runSimple(bodyText, env, funcs);
+              // restore
+              i = savedI;
+            }
+            continue;
+          }
+          
+          // for loop: for item in list:
+          const forListMatch = line.match(/^for\s+([a-zA-Z0-9_]+)\s+in\s+([a-zA-Z0-9_]+)\s*:\s*$/);
+          if(forListMatch){
+            const varName = forListMatch[1];
+            const listName = forListMatch[2];
+            const list = env.vars[listName];
+            const body = [];
+            // gather body
+            while(i < lines.length){
+              const ln = lines[i];
+              const lpad = ln.match(/^\s*/)[0].length;
+              if(lpad <= leading) break;
+              body.push(ln.slice(leading+2));
+              i++;
+            }
+            if(Array.isArray(list)){
+              for(let item of list){
+                env.vars[varName] = item;
+                const bodyText = body.join('\n');
+                runSimple(bodyText, env, funcs);
+              }
+            }
+            continue;
+          }
+
+          // if/else
+          const ifMatch = line.match(/^if\s+([a-zA-Z0-9_]+)\s*==\s*(["'])(.*?)\2\s*:\s*$/);
+          if(ifMatch){
+            const varName = ifMatch[1];
+            const want = ifMatch[3];
+            const thenBody = [];
+            while(i < lines.length){
+              const ln = lines[i];
+              const lpad = ln.match(/^\s*/)[0].length;
+              if(lpad <= leading) break;
+              thenBody.push(ln.slice(leading+2));
+              i++;
+            }
+            // check for else
+            let elseBody = [];
+            const nextLine = lines[i] ? lines[i].trim() : '';
+            if(nextLine.startsWith('else:')){
+              i++; // skip else:
+              while(i < lines.length){
+                const ln = lines[i];
+                const lpad = ln.match(/^\s*/)[0].length;
+                if(lpad <= leading) break;
+                elseBody.push(ln.slice(leading+2));
+                i++;
+              }
+            }
+            const val = env.vars[varName];
+            if(String(val) === want){
+              runSimple(thenBody.join('\n'), env, funcs);
+            } else {
+              runSimple(elseBody.join('\n'), env, funcs);
+            }
+            continue;
+          }
+
+          // variable assignment: a = "value" or a = [list] or a = {dict}
+          const assign = line.match(/^([a-zA-Z0-9_]+)\s*=\s*(["'])(.*?)\2\s*$/);
+          if(assign){
+            env.vars[assign[1]] = assign[3];
+            continue;
+          }
+          
+          // list assignment: a = [item1, item2, item3]
+          const listAssign = line.match(/^([a-zA-Z0-9_]+)\s*=\s*\[(.*?)\]\s*$/);
+          if(listAssign){
+            const listContent = listAssign[2].trim();
+            if(listContent === ''){
+              env.vars[listAssign[1]] = [];
+            } else {
+              const items = listContent.split(',').map(item => item.trim().replace(/['"]/g, ''));
+              env.vars[listAssign[1]] = items;
+            }
+            continue;
+          }
+          
+          // dictionary assignment: a = {key1: value1, key2: value2}
+          const dictAssign = line.match(/^([a-zA-Z0-9_]+)\s*=\s*\{(.*?)\}\s*$/);
+          if(dictAssign){
+            const dictContent = dictAssign[2].trim();
+            if(dictContent === ''){
+              env.vars[dictAssign[1]] = {};
+            } else {
+              const pairs = dictContent.split(',').map(pair => {
+                const [key, value] = pair.split(':').map(s => s.trim().replace(/['"]/g, ''));
+                return [key, value];
+              });
+              env.vars[dictAssign[1]] = Object.fromEntries(pairs);
+            }
+            continue;
+          }
+
+          // function call: name()
+          const call = line.match(/^([a-zA-Z0-9_]+)\s*\(\s*\)\s*$/);
+          if(call && funcs[call[1]]){
+            runSimple(funcs[call[1]], env, funcs);
+            continue;
+          }
+
+          // print("x")
+          const printMatch = line.match(/^print\((['"])(.*?)\1\)\s*$/);
+          if(printMatch){
+            const key = printMatch[2].trim();
+            evaluatePrint(key);
+            continue;
+          }
+
+          // add("x")
+          const addMatch = line.match(/^add\((['"])(.*?)\1\)\s*$/);
+          if(addMatch){
+            const key = addMatch[2].trim();
+            evaluateAdd(key);
+            continue;
+          }
+
+          // save("water")
+          const saveMatch = line.match(/^save\((['"])(.*?)\1\)\s*$/);
+          if(saveMatch){
+            const key = saveMatch[2].trim();
+            evaluateSave(key);
+            continue;
+          }
+
+          // fallback: unknown statement -> ignore
+        }
+      }
+
+      // helper executor for simple blocks
+      function runSimple(text, envLocal, funcsLocal){
+        const bodyLines = text.split('\n');
+        // temporarily run by iterating lines
+        for(let idx=0; idx<bodyLines.length; idx++){
+          const ln = bodyLines[idx].trim();
+          if(ln === '' || ln.startsWith('#')) continue;
+          // support print/add/save/assignment/func call/list/dict inside blocks
+          const assign = ln.match(/^([a-zA-Z0-9_]+)\s*=\s*(["'])(.*?)\2\s*$/);
+          if(assign){ envLocal.vars[assign[1]] = assign[3]; continue; }
+          
+          const listAssign = ln.match(/^([a-zA-Z0-9_]+)\s*=\s*\[(.*?)\]\s*$/);
+          if(listAssign){
+            const listContent = listAssign[2].trim();
+            if(listContent === ''){
+              envLocal.vars[listAssign[1]] = [];
+            } else {
+              const items = listContent.split(',').map(item => item.trim().replace(/['"]/g, ''));
+              envLocal.vars[listAssign[1]] = items;
+            }
+            continue;
+          }
+          
+          const dictAssign = ln.match(/^([a-zA-Z0-9_]+)\s*=\s*\{(.*?)\}\s*$/);
+          if(dictAssign){
+            const dictContent = dictAssign[2].trim();
+            if(dictContent === ''){
+              envLocal.vars[dictAssign[1]] = {};
+            } else {
+              const pairs = dictContent.split(',').map(pair => {
+                const [key, value] = pair.split(':').map(s => s.trim().replace(/['"]/g, ''));
+                return [key, value];
+              });
+              envLocal.vars[dictAssign[1]] = Object.fromEntries(pairs);
+            }
+            continue;
+          }
+          
+          const p = ln.match(/^print\((['"])(.*?)\1\)\s*$/);
+          if(p){ evaluatePrint(p[2]); continue; }
+          const a = ln.match(/^add\((['"])(.*?)\1\)\s*$/);
+          if(a){ evaluateAdd(a[2]); continue; }
+          const s = ln.match(/^save\((['"])(.*?)\1\)\s*$/);
+          if(s){ evaluateSave(s[2]); continue; }
+          const c = ln.match(/^([a-zA-Z0-9_]+)\s*\(\s*\)\s*$/);
+          if(c && funcsLocal[c[1]]){ runSimple(funcsLocal[c[1]], envLocal, funcsLocal); continue; }
+          // ignore other
+        }
+      }
+
+      // visual effect functions (these update DOM & awards)
+      function evaluatePrint(key){
+        if(key === 'water' || key === 'river'){
+          addToScene('river');
+        } else if(DOLLS[key]){
+          addToScene(key);
+        } else if(key.includes('tree')){
+          addToScene(key);
+        } else {
+          // unknown: create simple label
+          addCustomLabel(key);
+        }
+      }
+      function evaluateAdd(key){
+        if(DOLLS[key]) addToScene(key);
+        else addCustomLabel(key);
+      }
+      function evaluateSave(key){
+        if(key === 'water'){
+          addToScene('river');
+          addToScene('fish');
+          addToScene('crab');
+        } else {
+          addToScene(key);
+        }
+      }
+      function addCustomLabel(label){
+        const el = document.createElement('div');
+        el.className = 'doll';
+        el.innerHTML = `<div style="font-size:20px">✨</div><div>${label}</div>`;
+        scene.appendChild(el);
+      }
+
+      // run
+      try{
+        clearScene();
+        i = 0;
+        execBlock(0);
+        
+        // Analyze code for organisms and create groups
+        const organisms = analyzeCodeForOrganisms(raw);
+        createGroupsFromAnalysis(organisms);
+        
+        // award points: count dolls as points
+        const pts = scene.children.length;
+        const prev = parseInt(localStorage.getItem('c4n_points')||'0',10);
+        const newPoints = prev + pts;
+        localStorage.setItem('c4n_points', newPoints);
+        pointsEl.innerText = newPoints;
+        checkChallenges();
+        
+        // Show success popup
+        showSuccessPopup();
+      } catch(e){
+        console.error('Interpreter error:', e);
+        showErrorPopup();
+      }
+    }
+
+    // challenge checks and badges
+    function checkChallenges(){
+      const els = Array.from(scene.children).map(n=>n.innerText.toLowerCase());
+      const names = els.join(' ');
+      const badges = JSON.parse(localStorage.getItem('c4n_badges')||'[]');
+      let changed = false;
+      if((names.match(/tree/g)||[]).length >= 3 && !badges.includes('Tree Planter')){ badges.push('Tree Planter'); changed=true; }
+      if((names.match(/cow/g)||[]).length + (names.match(/deer/g)||[]).length >= 2 && !badges.includes('Forest Guardian')){ badges.push('Forest Guardian'); changed=true; }
+      if(names.includes('river') && !badges.includes('River Saver')){ badges.push('River Saver'); changed=true; }
+      if(names.includes('hanuman') && !badges.includes('Nature Hero')){ badges.push('Nature Hero'); changed=true; }
+      if(changed){ localStorage.setItem('c4n_badges', JSON.stringify(badges)); renderBadges(); showPopup(); }
+    }
+
+    function renderBadges(){
+      const badges = JSON.parse(localStorage.getItem('c4n_badges')||'[]');
+      const container = document.getElementById('badges');
+      container.innerHTML = '';
+      badges.forEach(b=>{
+        const el = document.createElement('div'); el.className='badge'; el.textContent=b; container.appendChild(el);
+      });
+    }
+    
+    // Badge system with more badges
+    const ALL_BADGES = [
+      { id: 'tree_planter', name: 'Tree Planter 🌱', description: 'Plant 3 trees', requirement: 'print("tree") 3 times' },
+      { id: 'forest_guardian', name: 'Forest Guardian 🌲', description: 'Add 2 animals', requirement: 'add("animal") 2 times' },
+      { id: 'river_saver', name: 'River Saver 🌊', description: 'Save water', requirement: 'save("water")' },
+      { id: 'nature_hero', name: 'Nature Hero 🦸‍♂️', description: 'Unlock Hanuman', requirement: 'print("hanuman")' },
+      { id: 'code_master', name: 'Code Master 💻', description: 'Write 10 lines of code', requirement: 'Write complex programs' },
+      { id: 'loop_expert', name: 'Loop Expert 🔄', description: 'Use loops 5 times', requirement: 'for i in range()' },
+      { id: 'function_wizard', name: 'Function Wizard 🧙‍♂️', description: 'Create 3 functions', requirement: 'def function_name()' },
+      { id: 'list_master', name: 'List Master 📋', description: 'Use lists 3 times', requirement: 'animals = ["cow", "deer"]' },
+      { id: 'conditional_pro', name: 'Conditional Pro 🤔', description: 'Use if/else 5 times', requirement: 'if condition:' },
+      { id: 'ecosystem_builder', name: 'Ecosystem Builder 🏞️', description: 'Create all group types', requirement: 'Forest, Meadow, River, Village' },
+      { id: 'wildlife_expert', name: 'Wildlife Expert 🐾', description: 'Add 10 different animals', requirement: 'Various add() calls' },
+      { id: 'nature_artist', name: 'Nature Artist 🎨', description: 'Create 20 visual outputs', requirement: 'Multiple print/add calls' }
+    ];
+    
+    function updateBadgesDisplay() {
+      const earnedBadges = JSON.parse(localStorage.getItem('c4n_badges') || '[]');
+      const earnedContainer = document.getElementById('earnedBadges');
+      const availableContainer = document.getElementById('availableBadges');
+      
+      // Clear containers
+      earnedContainer.innerHTML = '';
+      availableContainer.innerHTML = '';
+      
+      // Show earned badges
+      earnedBadges.forEach(badgeName => {
+        const badge = ALL_BADGES.find(b => b.name === badgeName);
+        if (badge) {
+          const el = document.createElement('div');
+          el.className = 'badge-item badge-earned';
+          el.innerHTML = `${badge.name} ✓`;
+          earnedContainer.appendChild(el);
+        }
+      });
+      
+      // Show available badges
+      ALL_BADGES.forEach(badge => {
+        if (!earnedBadges.includes(badge.name)) {
+          const el = document.createElement('div');
+          el.className = 'badge-item badge-available';
+          el.innerHTML = `${badge.name}`;
+          el.title = `${badge.description}\nRequirement: ${badge.requirement}`;
+          availableContainer.appendChild(el);
+        }
+      });
+    }
+
+    function showPopup(){ popup.classList.add('show'); }
+    
+    // Success and error popup functions
+    function showSuccessPopup(){
+      const successPopup = document.getElementById('successPopup');
+      successPopup.classList.add('show');
+      setTimeout(() => {
+        successPopup.classList.remove('show');
+      }, 3000);
+    }
+    
+    function showErrorPopup(){
+      const errorPopup = document.getElementById('errorPopup');
+      errorPopup.classList.add('show');
+      setTimeout(() => {
+        errorPopup.classList.remove('show');
+      }, 4000);
+    }
+
+    // gallery
+    function saveSceneToGallery(){
+      const items = JSON.parse(localStorage.getItem('c4n_gallery')||'[]');
+      // snapshot scene as text
+      const snapshot = Array.from(scene.children).map(n=>n.innerText).join(' | ');
+      const entry = {id:Date.now(), snapshot, code: editor.value};
+      items.unshift(entry);
+      localStorage.setItem('c4n_gallery', JSON.stringify(items));
+      renderGallery();
+    }
+    function renderGallery(){
+      const items = JSON.parse(localStorage.getItem('c4n_gallery')||'[]');
+      galleryEl.innerHTML = '';
+      items.slice(0,12).forEach(it=>{
+        const el = document.createElement('div'); el.className='cardSmall';
+        el.innerHTML = `<div style="font-size:12px;font-weight:700">${new Date(it.id).toLocaleString()}</div><div style="font-size:12px;margin-top:6px">${it.snapshot}</div><div style="margin-top:8px;display:flex;gap:6px"><button class='btn small' data-id='${it.id}'>Load</button><button class='btn small' data-id-delete='${it.id}'>Delete</button></div>`;
+        galleryEl.appendChild(el);
+      });
+    }
+
+    // UI wiring
+    document.getElementById('runBtn').addEventListener('click', ()=>runCode(editor.value));
+    document.getElementById('saveScene').addEventListener('click', ()=>{ saveSceneToGallery(); alert('Scene saved to gallery!') });
+    document.getElementById('loadExample').addEventListener('click', ()=>{ editor.value = '# Example - challenge: plant 3 trees\nfor i in range(3):\n  print("tree")'; });
+    document.getElementById('clearEditor').addEventListener('click', ()=>editor.value='');
+    document.getElementById('formatBtn').addEventListener('click', ()=>{ /* very small formatter: convert tabs to 2 spaces */ editor.value = editor.value.replace(/\t/g,'  '); });
+
+    document.getElementById('startCoding').addEventListener('click', ()=>{ window.scrollTo({top:200,behavior:'smooth'}); });
+    document.getElementById('learnBasics').addEventListener('click', ()=>{ 
+      document.getElementById('learnBasicsModal').classList.add('show');
+    });
+    document.getElementById('challengesBtn').addEventListener('click', ()=>{ 
+      document.getElementById('badgesModal').classList.add('show');
+      updateBadgesDisplay();
+    });
+    document.getElementById('galleryBtn').addEventListener('click', ()=>{ document.querySelector('#gallery').scrollIntoView({behavior:'smooth'}); });
+
+    // lesson click
+    document.querySelectorAll('.lesson').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        document.querySelectorAll('.lesson').forEach(x=>x.classList.remove('active'));
+        el.classList.add('active');
+        const id = el.dataset.lesson;
+        if(id==='intro') editor.value = '# 🌟 Welcome to Code4Nature! 🌟\n# Learn programming while saving the environment!\n\n# 1. Basic Commands\nprint("tree")        # Creates a tree\nadd("cow")          # Adds a cow\nsave("water")       # Creates a river with fish\n\n# 2. Try these examples:\nprint("oak_tree")\nadd("deer")\nadd("elephant")\n\n# Notice how trees group in forest, animals in meadow!';
+        if(id==='vars') editor.value = '# 🔤 Variables and Conditionals\n# Store data in variables\nwater = "dirty"\nland = "dry"\nweather = "sunny"\n\n# Make decisions with if/else\nif water == "dirty":\n    save("water")\n    add("fish")\n    add("crab")\nelse:\n    print("river")\n\nif land == "dry":\n    print("cactus")\n    print("desert_plant")\nelse:\n    print("crop")\n    print("tree")';
+        if(id==='loops') editor.value = '# 🔄 Loops - Repeat Actions\n# Count-based loops\nfor i in range(5):\n    print("oak_tree")\n    print("mango_tree")\n\n# List-based loops\nanimals = ["cow", "deer", "elephant", "lion"]\nfor animal in animals:\n    add(animal)\n\n# Nested loops\nfor i in range(2):\n    for j in range(2):\n        print("flower")\n\n# Creates a forest with 5 trees!';
+        if(id==='conds') editor.value = '# 🤔 Advanced Conditionals\n# Multiple conditions\nweather = "sunny"\nseason = "spring"\n\nif weather == "sunny" and season == "spring":\n    print("tree")\n    print("flower")\n    add("bird")\nelif weather == "rainy":\n    save("water")\n    add("frog")\nelse:\n    print("cactus")\n    add("lizard")';
+        if(id==='functions') editor.value = '# 🧙‍♂️ Functions - Reusable Code Blocks\n# Define a function\ndef create_forest():\n    for i in range(3):\n        print("tree")\n    add("deer")\n    add("bird")\n\n# Call the function\ncreate_forest()\n\n# Function with parameters\ndef plant_trees(count):\n    for i in range(count):\n        print("oak_tree")\n\nplant_trees(5)\n\n# Function that returns values\ndef get_animals():\n    return ["cow", "deer", "elephant"]\n\nmy_animals = get_animals()\nfor animal in my_animals:\n    add(animal)';
+        if(id==='lists') editor.value = '# 📋 Lists and Dictionaries - Data Structures\n# Lists store multiple items\nanimals = ["cow", "deer", "elephant", "lion"]\ntrees = ["tree", "oak_tree", "mango_tree", "pine_tree"]\nwater_life = ["fish", "crab", "turtle"]\n\n# Dictionaries store key-value pairs\nhabitat = {\n    "cow": "field",\n    "deer": "forest",\n    "elephant": "savanna",\n    "lion": "grassland"\n}\n\n# Use lists in loops\nfor animal in animals:\n    add(animal)\n\nfor tree in trees:\n    print(tree)\n\n# Access dictionary values\nfor creature, home in habitat.items():\n    print(f"{creature} lives in {home}")\n    add(creature)\n\n# Lists automatically create groups!';
+      })
+    });
+
+    // popup close
+    document.getElementById('closePopup').addEventListener('click', ()=>{ popup.classList.remove('show'); renderBadges(); });
+    
+    // Success popup close
+    document.getElementById('closeSuccessPopup').addEventListener('click', ()=>{ 
+      document.getElementById('successPopup').classList.remove('show'); 
+    });
+    
+    // Error popup close
+    document.getElementById('closeErrorPopup').addEventListener('click', ()=>{ 
+      document.getElementById('errorPopup').classList.remove('show'); 
+    });
+    
+    // Learn Basics modal
+    document.getElementById('closeLearnModal').addEventListener('click', ()=>{ 
+      document.getElementById('learnBasicsModal').classList.remove('show'); 
+    });
+    
+    document.getElementById('tryExamples').addEventListener('click', ()=>{ 
+      document.getElementById('learnBasicsModal').classList.remove('show');
+      editor.value = `# Try these examples from Learn Basics!\n\n# 1. Print Statements\nprint("tree")\nprint("cow")\nprint("river")\n\n# 2. Adding Animals\nadd("deer")\nadd("elephant")\nadd("lion")\n\n# 3. Variables\nname = "forest"\ntype = "trees"\nprint(name)\n\n# 4. Conditionals\nweather = "sunny"\nif weather == "sunny":\n    print("tree")\nelse:\n    print("cactus")\n\n# 5. Loops\nfor i in range(3):\n    print("oak_tree")\n\n# 6. Lists\nanimals = ["cow", "deer", "elephant"]\nfor animal in animals:\n    add(animal)\n\n# 7. Functions\ndef create_forest():\n    for i in range(3):\n        print("tree")\ncreate_forest()`;
+    });
+    
+    // Badges modal
+    document.getElementById('closeBadgesModal').addEventListener('click', ()=>{ 
+      document.getElementById('badgesModal').classList.remove('show'); 
+    });
+    
+    // Close modals when clicking outside
+    document.getElementById('learnBasicsModal').addEventListener('click', (e) => {
+      if (e.target.id === 'learnBasicsModal') {
+        document.getElementById('learnBasicsModal').classList.remove('show');
+      }
+    });
+    
+    document.getElementById('badgesModal').addEventListener('click', (e) => {
+      if (e.target.id === 'badgesModal') {
+        document.getElementById('badgesModal').classList.remove('show');
+      }
+    });
+
+    // init
+    pointsEl.innerText = localStorage.getItem('c4n_points')||'0';
+    renderBadges();
+    renderGallery();
+
+    // allow clicking gallery load/delete
+    galleryEl.addEventListener('click', (e)=>{
+      const id = e.target.getAttribute('data-id');
+      const iddel = e.target.getAttribute('data-id-delete');
+      if(id){
+        const items = JSON.parse(localStorage.getItem('c4n_gallery')||'[]');
+        const it = items.find(x=>String(x.id)===String(id));
+        if(it){ editor.value = it.code; alert('Loaded code from gallery'); }
+      }
+      if(iddel){
+        let items = JSON.parse(localStorage.getItem('c4n_gallery')||'[]');
+        items = items.filter(x=>String(x.id)!==String(iddel));
+        localStorage.setItem('c4n_gallery', JSON.stringify(items)); renderGallery();
+      }
+    });
+
+    // make snippet clickable
+    document.getElementById('snippets').addEventListener('click', (e)=>{
+      if(e.target.classList.contains('snippet')){
+        editor.value += '\n' + e.target.innerText;
+      }
+    });
+
+    // small safety: prevent real eval
+    window.eval = ()=>{ throw new Error('eval disabled for safety'); };
+
+    // helpful: show a final special scene when user writes the word 'unlock_hanuman' - this is the "big mission" demonstration
+    const originalRun = runCode;
+    runCode = function(src){
+      if(src.includes('unlock_hanuman')){
+        clearScene();
+        addToScene('hanuman');
+        addToScene('mountain');
+        // mountain is not defined - create custom
+        const m = document.createElement('div'); m.className='doll'; m.innerHTML='<div style="font-size:28px">⛰️</div><div>Mountain</div>'; scene.appendChild(m);
+        const prev = parseInt(localStorage.getItem('c4n_points')||'0',10); localStorage.setItem('c4n_points', prev+50); pointsEl.innerText = prev+50; checkChallenges();
+        return;
+      }
+      originalRun(src);
+    }
+
+    // small UX: clicking a doll will animate a tiny bounce
+    scene.addEventListener('click', (e)=>{
+      const target = e.target.closest('.doll');
+      if(!target) return;
+      target.style.transform = 'translateY(-6px)';
+      setTimeout(()=>target.style.transform='translateY(0)',220);
+    });
+
+  </script>
+</body>
+</html>
